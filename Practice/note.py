@@ -405,51 +405,188 @@
 #         s.close()
 
 
-import socket
-from collections import deque
+# import socket
+# from collections import deque
 
-s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-s.bind(('',3000))
+# s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+# s.bind(('',3000))
 
-mboxID = {}
-while True:
-    data, addr = s.recvfrom(1024)
-    temp = data.decode().split()
+# mboxID = {}
+# while True:
+#     data, addr = s.recvfrom(1024)
+#     temp = data.decode().split()
 
-    # print ('temp:', temp)
+#     # print ('temp:', temp)
 
-    command = temp[0]
-    boxid = temp[1]
-    msg_tmp = temp[2:]
-    msg = ''
-    # print ('msg_tmp:', msg_tmp)
-    for i in msg_tmp:
-        msg = msg + str(i) + ' '
-    # print('msg:', msg)
+#     command = temp[0]
+#     boxid = temp[1]
+#     msg_tmp = temp[2:]
+#     msg = ''
+#     # print ('msg_tmp:', msg_tmp)
+#     for i in msg_tmp:
+#         msg = msg + str(i) + ' '
+#     # print('msg:', msg)
 
-    print('command: {}, boxid: {}, msg: {}'.format(command,boxid,msg))
+#     print('command: {}, boxid: {}, msg: {}'.format(command,boxid,msg))
 
-    if command == 'send':
-        if boxid not in mboxID:
-            mboxID[str(boxid)] = deque()
-            mboxID[str(boxid)].append(msg)
+#     if command == 'send':
+#         if boxid not in mboxID:
+#             mboxID[str(boxid)] = deque()
+#             mboxID[str(boxid)].append(msg)
         
-        else:
-            mboxID[str(boxid)].append(msg)
+#         else:
+#             mboxID[str(boxid)].append(msg)
 
-        # print(msg,'is stored at ',mboxID[str(boxid)])
+#         # print(msg,'is stored at ',mboxID[str(boxid)])
 
-    elif command == 'receive':
-        if boxid not in mboxID:
-            s.sendto(b'No messages',addr)    
+#     elif command == 'receive':
+#         if boxid not in mboxID:
+#             s.sendto(b'No messages',addr)    
         
-        if mboxID[str(boxid)]:
-            send_msg = mboxID[str(boxid)].popleft()
-            s.sendto(send_msg.encode(),addr)
+#         if mboxID[str(boxid)]:
+#             send_msg = mboxID[str(boxid)].popleft()
+#             s.sendto(send_msg.encode(),addr)
 
-        else:
-            s.sendto(b'No messages',addr)    
+#         else:
+#             s.sendto(b'No messages',addr)    
     
-    elif command == 'quit':
-        s.close()
-        break
+#     elif command == 'quit':
+#         s.close()
+#         break
+
+
+# from concurrent.futures import thread
+# import threading
+
+# x = 0
+
+# def increment():
+#     global x
+#     x+=1
+
+# def thread_task(lock):
+#     for _ in range(300000):
+#         lock.acquire()
+#         increment()
+#         lock.release()
+
+# def main_task():
+#     global x
+#     x = 0
+
+#     lock = threading.Lock()
+
+#     t1 = threading.Thread(target = thread_task, args=(lock,))
+#     t2 = threading.Thread(target = thread_task, args=(lock,))
+
+#     t1.start()
+#     t2.start()
+
+#     t1.join()
+#     t2.join()
+
+# for i in range(10):
+#     main_task()
+#     print('iteration {0}: x={1}'.format(i,x))
+
+
+# import threading
+
+# def prtSquare(num):
+#     print('sqaure: {}'.format(num**2))
+
+# def prtCube(num):
+#     print('cuba:{}'.format(num**3))
+
+# t1 = threading.Thread(target=prtSquare,args=(10,))
+# t2 = threading.Thread(target=prtCube,args=(40,))
+
+# t1.start()
+# t2.start()
+
+# t1.join()
+# t2.join()
+
+# print('done')
+
+# import socket
+# import threading
+
+# port = 2500
+# bufsize = 1024
+
+# sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+# sock.bind(('',port))
+# sock.listen(5)
+
+# def echo(sock):
+#     while True:
+#         data = sock.recv(bufsize)
+#         if not data:
+#             break
+#         print('recevied data: {} '.format(data.decode()))
+#         sock.send(data)
+
+#     sock.close()
+
+# while True:
+#     conn, addr = sock.accept()
+#     print('connect with {}'.format(addr))
+#     th = threading.Thread(target=echo,args=(conn,))
+#     th.start()
+
+# import threading
+# import socket
+
+# port = 3000
+# bufsize = 1024
+
+# def sendtask(socket):
+#     while True:
+#         send = input('send:')
+#         socket.send(send.encode())
+
+# def recvtask(socket):
+#     while True:
+#         msg = socket.recv(1024)
+#         if not msg:
+#             break
+#         print('receive: {}'.format(msg.decode()))
+
+# sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+# sock.bind(('',port))
+# sock.listen(1)
+
+# conn,addr = sock.accept()
+# sendth = threading.Thread(target=sendtask,args=(conn,))
+# recvth = threading.Thread(target=recvtask,args=(conn,))
+
+# sendth.start()
+# recvth.start()
+
+# import socket
+# import time
+
+# client = []
+
+# s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+# s.bind(('',3000))
+
+# print('server start')
+
+# while True:
+#     data, addr = s.recvfrom(1024)
+#     if 'quit' in data.decode():
+#         client.remove(addr)
+#         continue
+
+#     if addr not in client:
+#         client.append(addr)
+#         print('new client')
+
+#     print(time.asctime() + str(addr) +':'+data.decode())
+
+#     for i in client:
+#         if i != addr:
+#             s.sendto(data,i)
+

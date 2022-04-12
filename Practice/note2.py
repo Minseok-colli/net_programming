@@ -1,4 +1,4 @@
-# import socket
+1# import socket
 
 # sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 # addr = ('localhost',9000)
@@ -256,26 +256,129 @@
 
 # sock.close()
 
-import socket
+# import socket
 
-s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+# s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 
-while True:
-    command = input('Enter the message("send mboxID message" or "receive mboxID"): ')
+# while True:
+#     command = input('Enter the message("send mboxID message" or "receive mboxID"): ')
 
-    if command.startswith('send'):
-        s.sendto(command.encode(),('localhost',3000))
-        print('OK')
+#     if command.startswith('send'):
+#         s.sendto(command.encode(),('localhost',3000))
+#         print('OK')
 
-    elif command.startswith('receive'):
-        s.sendto(command.encode(),('localhost',3000))
-        msg , addr = s.recvfrom(1024)
-        print(msg.decode())
+#     elif command.startswith('receive'):
+#         s.sendto(command.encode(),('localhost',3000))
+#         msg , addr = s.recvfrom(1024)
+#         print(msg.decode())
 
-    elif command.startswith('quit'):
-        s.sendto(b'quit',('localhost',3000))
-        s.close()
-        break
+#     elif command.startswith('quit'):
+#         s.sendto(b'quit',('localhost',3000))
+#         s.close()
+#         break
 
-    else:
-        continue
+#     else:
+#         continue
+
+# import threading
+# import datetime
+
+# class mythread(threading.Thread):
+#     def __init__(self,name,counter):
+#         super().__init__()
+#         self.name = name
+#         self.counter = counter
+
+#     def run(self):
+#         print('\nStarting {}[{}]'.format(self.name,self.counter))
+#         print_date(self.name,self.counter)
+#         print('\nExiting {}[{}]'.format(self.name,self.counter))
+
+# def print_date(threadname,counter):
+#     today = datetime.date.today()
+#     print('\n{}[{}]: {}'.format(threadname,counter,today))
+
+# thread1 = mythread('th',1)
+# thread2 = mythread('th',2)
+
+# thread1.start()
+# thread2.start()
+
+# thread1.join()
+# thread2.join()
+
+# print('\nExiting the program')
+
+# import socket
+# import threading
+
+# port = 3000
+# bufsize = 1024
+
+# sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+# sock.connect(('localhost',port))
+
+# while True:
+#     msg = input('enter the message:')
+#     if msg == 'q':
+#         sock.close()
+#     sock.send(msg.encode())
+#     data = sock.recv(bufsize)
+#     if not data:
+#         break
+#     print('server: {}'.format(data.decode()))
+
+
+# import threading
+# import socket
+
+# port = 3000
+# bufsize = 1024
+
+# def sendtask(socket):
+#     while True:
+#         send = input('send:')
+#         socket.send(send.encode())
+
+# def recvtask(socket):
+#     while True:
+#         recv = socket.recv(bufsize)
+#         print("receive : {}".format(recv.decode()))
+
+# sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+# sock.connect(('localhost',port))
+
+# sendth = threading.Thread(target = sendtask,args=(sock,))
+# recvth = threading.Thread(target=recvtask,args=(sock,))
+
+# sendth.start()
+# recvth.start()
+
+# import socket
+# import threading
+
+# def senddata(sock,id):
+#     while True:
+#         msg = '['+id+']' + input('enter message:')
+#         sock.sendto(msg.encode(),addr)
+
+#         if msg == 'quit':
+#             sock.close()
+#             break
+
+# def recvdata(sock):
+#     while True:
+#         msg,addr = sock.recvfrom(1024)
+#         print(msg.decode())
+
+# addr = ('localhost',3000)
+# s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+
+# id = input('enter the id: ')    
+# s.sendto(str(id).encode(),addr)
+
+# sendth = threading.Thread(target=senddata,args=(s,id,))
+# recvth = threading.Thread(target=recvdata,args=(s,))
+
+# sendth.start()
+# recvth.start()
