@@ -1,7 +1,7 @@
 # from cv2 import sort
 
 
-1# import socket
+# import socket
 
 # sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 # addr = ('localhost',9000)
@@ -571,6 +571,7 @@
 
 # sendth.start()
 # recvth.start()
+
 #multithread 
 # import socket
 # import threading
@@ -622,16 +623,23 @@
 #     print('received message',data.decode())
 
 import socket
+import threading
 
 sock = socket.socket()
 sock.connect(('localhost',9000))
 
-while True:
-    msg = input('Messages to send: ')
-    sock.send(msg.encode())
+def recvTask(sock):
+    while True:
+        data = sock.recv(1024)
+        print('<-', data.decode())
 
-    data = sock.recv(1024)
-    if not data:
-        sock.close()
-        break
-    print('Received Message',data.decode())
+
+th = threading.Thread(target=recvTask, args=(sock,))
+th.start()
+
+my_id = input('Enter your ID: ')
+sock.send(('['+my_id+']').encode())
+
+while True:
+    msg = '[' + my_id + ']' + input()
+    sock.send(msg.encode())
